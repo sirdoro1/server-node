@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const Blog = require('./models/blogs');
+const ejs = require('ejs');
 require('dotenv').config();
 
 const app = express();
@@ -22,8 +23,7 @@ mongoose.connect(dbURI,{useNewUrlParser: true, useUnifiedTopology:true})
 
 
 app.get('/',(req, res)=>{
-    // res.send('<h3>Home Page</h3>');
-    res.sendFile('./views/index.html', {root: __dirname});
+    res.render('index');
 });
 
 app.get('/add-record',(req,res) => {
@@ -38,17 +38,15 @@ app.get('/add-record',(req,res) => {
 });
 
 app.get('/about',(req, res)=>{
-    // res.send('<h3>About Page</h3>');
-    res.sendFile('./views/about.html', {root: __dirname});
+    res.render('about');
 });
 
 app.get('/contact',(req, res)=>{
-    // res.send('<h3>About Page</h3>');
-    res.sendFile('./views/contact.html', {root: __dirname});
+    res.render('contact');
 });
 
 app.use((req,res) => {
-    res.sendFile('./views/404.html', { root: __dirname});
+    res.render('404');
 })
 
 
