@@ -6,6 +6,9 @@ require('dotenv').config();
 
 const app = express();
 
+// allow assets to be served
+app.use(express.static('public'));
+
 // register view engine
 app.set('view engine', 'ejs');
 
@@ -23,7 +26,7 @@ mongoose.connect(dbURI,{useNewUrlParser: true, useUnifiedTopology:true})
 
 
 app.get('/',(req, res)=>{
-    res.render('index');
+    res.render('index',{title: 'Home'});
 });
 
 app.get('/add-record',(req,res) => {
@@ -38,15 +41,15 @@ app.get('/add-record',(req,res) => {
 });
 
 app.get('/about',(req, res)=>{
-    res.render('about');
+    res.render('about',{ title: 'About' });
 });
 
 app.get('/contact',(req, res)=>{
-    res.render('contact');
+    res.render('contact', { title: 'Contact' });
 });
 
 app.use((req,res) => {
-    res.render('404');
+    res.render('404', { title: '404' });
 })
 
 
