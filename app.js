@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const Blog = require('./models/blogs');
+const helpers = require('./helpers/helpers');
 const ejs = require('ejs');
 require('dotenv').config();
 
@@ -24,9 +25,23 @@ mongoose.connect(dbURI,{useNewUrlParser: true, useUnifiedTopology:true})
         console.log(err);
     });
 
+app.use(function(req, res, next) {
+  res.locals.helpers = helpers;
+  next();
+});
 
 app.get('/',(req, res)=>{
-    res.render('index',{title: 'Home'});
+    Blog.find()
+    .then((result)=>{
+        res.render('index',{title: 'Home',currenturl: req.url,blogs: result});
+    })
+    .catch((err)=>{
+        console.log(err);
+    });
+});
+
+app.get('/blog',(req, res)=>{
+    res.render('blog',{title: 'Blog',currenturl: req.url});
 });
 
 app.get('/add-record',(req,res) => {
@@ -41,15 +56,15 @@ app.get('/add-record',(req,res) => {
 });
 
 app.get('/about',(req, res)=>{
-    res.render('about',{ title: 'About' });
+    res.render('about',{ title: 'About',currenturl: req.url});
 });
 
 app.get('/contact',(req, res)=>{
-    res.render('contact', { title: 'Contact' });
+    res.render('contact', { title: 'Contact',currenturl: req.url});
 });
 
 app.use((req,res) => {
-    res.render('404', { title: '404' });
+    res.render('404', { title: '404',currenturl: req.url});
 })
 
 
