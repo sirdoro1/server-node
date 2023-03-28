@@ -13,6 +13,8 @@ app.use(express.static('public'));
 // register view engine
 app.set('view engine', 'ejs');
 
+app.use(express.urlencoded({extended: true}));
+
 // connect mongoose to db
 const dbURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@first-project.k3cyc8a.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 mongoose.connect(dbURI,{useNewUrlParser: true, useUnifiedTopology:true})
@@ -41,7 +43,27 @@ app.get('/',(req, res)=>{
 });
 
 app.get('/blog',(req, res)=>{
-    res.render('blog',{title: 'Blog',currenturl: req.url});
+    Blog.find()
+    .then((result)=>{
+        res.render('blog',{title: 'Blog',currenturl: req.url,blogs: result});
+    })
+    .catch((err)=>{
+        console.log(err);
+    });
+});
+
+app.get('/blog/create',(req,res) => {
+    res.render('create',{title: 'Create Blog',currenturl: req.url});
+});
+
+app.post('/blog',(req,res) => {
+    const blog = new Blog(req.body);
+    blog.save()
+    .then((result)=>{
+        res.redirect('/blog');
+    }).catch((err)=>{
+        console.log(err);
+    });
 });
 
 app.get('/blog/:id',(req,res)=>{
@@ -49,6 +71,18 @@ app.get('/blog/:id',(req,res)=>{
     Blog.findById(id)
     .then((result)=>{
         res.render('view',{title: 'View Blog',currenturl: req.url,blog: result});
+    }).catch((err)=>{
+        console.log(err);
+    });
+});
+
+
+app.get('/blog/delete/:id',(req,res)=>{
+    const id = req.params.id;
+    console.log(id);
+    Blog.findByIdAndDelete(id)
+    .then((result)=>{
+         res.redirect('/blog');
     }).catch((err)=>{
         console.log(err);
     });
