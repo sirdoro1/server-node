@@ -44,6 +44,16 @@ app.get('/blog',(req, res)=>{
     res.render('blog',{title: 'Blog',currenturl: req.url});
 });
 
+app.get('/blog/:id',(req,res)=>{
+    const id = req.params.id;
+    Blog.findById(id)
+    .then((result)=>{
+        res.render('view',{title: 'View Blog',currenturl: req.url,blog: result});
+    }).catch((err)=>{
+        console.log(err);
+    });
+});
+
 app.get('/add-record',(req,res) => {
     const blog = new Blog({
         title: 'Second Blog post',
