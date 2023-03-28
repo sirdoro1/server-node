@@ -5,8 +5,31 @@
    <%- include('./partials/navbar.ejs'); %>
     <div class="container">
         <div class="row">
-            <div class="col-md-12 my-4">
+            <div class="col-md-12 my-4 d-flex justify-content-between">
                 <h3>Blog</h3>
+                <a class="btn btn-sm btn-primary" href="/blog/create">Create Article</a>
+            </div>
+            <div class="col-md-12">
+                <h5>All Update</h5>
+                <div class="row">
+                    <% blogs.forEach( blog=>{ %>
+                    <div class="col-md-6">
+                        <div class="card m-2">
+                            <div class="card-header d-flex justify-content-between">
+                                <h6><%= blog.title %></h6>
+                                <span></span>
+                                <span>
+                                    <a href="/blog/<%= blog._id %>" class="btn btn-sm btn-primary">View</a>
+                                    <a href="/blog/delete/<%= blog._id %>" class="btn btn-sm btn-danger">Delete</a>
+                                </span>
+                            </div>
+                            <div class="card-body">
+                                <p><%= blog.snippet %></p>
+                            </div>
+                        </div>
+                    </div>
+                    <% }); %>
+                </div>
             </div>
         </div>
     </div>
