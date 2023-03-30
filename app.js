@@ -88,17 +88,6 @@ app.get('/blog/delete/:id',(req,res)=>{
     });
 });
 
-app.get('/add-record',(req,res) => {
-    const blog = new Blog({
-        title: 'Second Blog post',
-        snippet: 'This is the very start of this blog',
-        body: 'This is the very start of this blog post of all other thing',
-    });
-    blog.save();
-    res.send(blog);
-    res.end();
-});
-
 app.get('/about',(req, res)=>{
     res.render('about',{ title: 'About',currenturl: req.url});
 });
