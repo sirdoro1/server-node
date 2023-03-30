@@ -20,7 +20,7 @@ const dbURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@f
 mongoose.connect(dbURI,{useNewUrlParser: true, useUnifiedTopology:true})
     .then((res)=>{
         console.log('DB connected Successfully');
-        app.listen(3000);
+        app.listen(process.env.PORT || 3000);
     })
     .catch((err)=>{
         console.log('Oops! an error occured!');
