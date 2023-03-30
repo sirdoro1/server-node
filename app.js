@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const Blog = require('./models/blogs');
 const helpers = require('./helpers/helpers');
 const ejs = require('ejs');
+const blogRouter = require('./routes/blogRoute');
 require('dotenv').config();
 
 const app = express();
@@ -42,51 +43,7 @@ app.get('/',(req, res)=>{
     });
 });
 
-app.get('/blog',(req, res)=>{
-    Blog.find()
-    .then((result)=>{
-        res.render('blog',{title: 'Blog',currenturl: req.url,blogs: result});
-    })
-    .catch((err)=>{
-        console.log(err);
-    });
-});
-
-app.get('/blog/create',(req,res) => {
-    res.render('create',{title: 'Create Blog',currenturl: req.url});
-});
-
-app.post('/blog',(req,res) => {
-    const blog = new Blog(req.body);
-    blog.save()
-    .then((result)=>{
-        res.redirect('/blog');
-    }).catch((err)=>{
-        console.log(err);
-    });
-});
-
-app.get('/blog/:id',(req,res)=>{
-    const id = req.params.id;
-    Blog.findById(id)
-    .then((result)=>{
-        res.render('view',{title: 'View Blog',currenturl: req.url,blog: result});
-    }).catch((err)=>{
-        console.log(err);
-    });
-});
-
-
-app.get('/blog/delete/:id',(req,res)=>{
-    const id = req.params.id;
-    console.log(id);
-    Blog.findByIdAndDelete(id)
-    .then((result)=>{
-         res.redirect('/blog');
-    }).catch((err)=>{
-        console.log(err);
-    });
-});
+app.use(blogRouter);
 
 app.get('/about',(req, res)=>{
     res.render('about',{ title: 'About',currenturl: req.url});
